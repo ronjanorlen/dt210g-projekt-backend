@@ -1,21 +1,33 @@
 const Review = require("../models/review.model"); // Inkludera recension-model 
+const User = require("../models/user.model");
 
 // Hämta alla recensioner 
 exports.getAllReviews = async (request, h) => {
-    // const { bookId } = request.query; // bokId 
+     const { bookId } = request.query; // bokId 
+
+
     // // om bokId inte finns 
     // if (!bookId){
     //     return h.response({ error: "Du måste ange bookId" }).code(400);
     // }
 
     try {
-        const reviews = await Review.find().populate("userId", "username"); // Hämta användare 
+
+       // const reviews = await Review.find();
+
+       let query = {};
+       if (bookId) {
+        query.bookId = bookId; // Filtrera ut recensioner baserat på bokID 
+       }
+
+       const reviews = await Review.find(query).populate("userId", "username"); // Hämta användare 
+
         // om det inte finns några recensioner 
-        if (reviews.length === 0) {
-            return h.response("Hittade inga recensioner").code(404);
+        if (!reviews || reviews.length === 0) {
+            return h.response({ message: "Det finns inga recensioner för denna bok" }).code(200);
         }
         // Annars returnera recensioner 
-        return reviews;
+        return h.response(reviews).code(200);
         // fånga fel 
     } catch (error) {
         return h.response({ message: error.message }).code(500);
@@ -25,7 +37,7 @@ exports.getAllReviews = async (request, h) => {
 // Hämta recension baserat på id 
 exports.getSingleReview = async (request, h) => {
     try {
-        const review = await Review.findById(request.params.id).populate("userId", "username");
+        const review = await Review.findById(request.params.id);
         return review || h.response("Hittade inte recensionen").code(404);
         // fånga fel 
     } catch (error) {
@@ -36,8 +48,29 @@ exports.getSingleReview = async (request, h) => {
 // Lägg till ny recension 
 exports.createReview = async (request, h) => {
     try {
-        const review = new Review(request.payload); // Ta data från payload 
-        return await review.save(); // Spara recension 
+
+       // const review = new Review(request.payload); // Ta data från payload 
+        const { bookId, userId, reviewText, rating } = request.payload; 
+
+        // Hämta användare från databasen 
+        const user = await User.findById(userId);
+        // Om användare in hittas 
+        if (!user) {
+            return h.response({ error: "Hittade inte användaren" }).code(404);
+        }
+
+        // Skapa ny recension 
+        const review = new Review({
+            bookId,
+            userId,
+            username: user.username, 
+            reviewText,
+            rating,
+        });
+
+        await review.save(); // Spara recension 
+        return h.response(review).code(201);
+
         // Fånga fel 
     } catch (error) {
         console.error("Något gick fel vid skapande av recension: ", error);

@@ -11,6 +11,10 @@ const reviewSchema = Mongoose.Schema({
         ref: "User",
         required: true
     },
+    username: {
+        type: String,
+        required: true
+    },
     reviewText: {
         type: String,
         required: true
@@ -21,9 +25,9 @@ const reviewSchema = Mongoose.Schema({
     },
     created: {
         type: Date,
-        default: Date.now 
+        default: Date.now
     }
-}); 
+});
 
 // Skapa model för recensioner 
 const Review = Mongoose.model("Review", reviewSchema);
