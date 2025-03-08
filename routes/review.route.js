@@ -34,6 +34,12 @@ module.exports = (server) => {
                 auth: false
             }
         },
+        // Hämta inloggad användares recensioner 
+        {
+            method: "GET",
+            path: "/reviews/user",
+            handler: reviewController.getUserReviews
+        },
         // Lägg till recension 
         {
             method: "POST",
@@ -69,9 +75,9 @@ module.exports = (server) => {
             method: "DELETE",
             path: "/reviews/{id}",
             handler: reviewController.deleteReview,
-            // options: {
-            //     auth: false
-            // }
+             options: {
+                 auth: false
+             }
         },
     ]);
 };

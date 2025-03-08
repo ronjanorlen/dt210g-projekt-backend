@@ -50,7 +50,7 @@ exports.createReview = async (request, h) => {
     try {
 
        // const review = new Review(request.payload); // Ta data från payload 
-        const { bookId, userId, reviewText, rating } = request.payload; 
+        const { bookId, bookTitle, userId, username, reviewText, rating } = request.payload; 
 
         // Hämta användare från databasen 
         const user = await User.findById(userId);
@@ -62,8 +62,9 @@ exports.createReview = async (request, h) => {
         // Skapa ny recension 
         const review = new Review({
             bookId,
+            bookTitle,
             userId,
-            username: user.username, 
+            username, 
             reviewText,
             rating,
         });
@@ -77,6 +78,37 @@ exports.createReview = async (request, h) => {
         return h.response(error).code(500);
     }
 };
+
+// Hämta recensioner för inloggad användare 
+exports.getUserReviews = async (request, h) => {
+
+    // Om användare inte är autentiserad 
+    if (!request.auth.isAuthenticated) {
+        return h.response({ error: "Inte autentiserad" }).code(401);
+    }
+
+
+    try {
+
+        const userId = request.auth.credentials.user._id; // id för inloggad användare 
+
+        const reviews = await Review.find({ userId }); // recensioner för användare 
+
+        // om användare ej skrivit några recensioner 
+        if (!reviews.length) {
+            return h.response("Hittade inga recensioner för denna användare").code(404);
+        }
+
+        // Annars returnera recensioner 
+        return reviews;
+
+        // fånga fel 
+    } catch (error) {
+        return h.response({ errro: error.message }).code(500);
+    }
+
+}
+
 
 // Uppdatera en recension 
 exports.updateReview = async (request, h) => {
@@ -105,7 +137,10 @@ exports.updateReview = async (request, h) => {
 // Ta bort recension 
 exports.deleteReview = async (request, h) => {
     try {
-        const review = await Review.findById(request.params.id); // Hämta id på recension 
+
+        const { id } = request.params;
+
+        const review = await Review.findOneAndDelete({ _id: id }); // Hämta id på recension 
         // om recension inte finns 
         if (!review) 
             return h.response("Hittade inte recensionen").code(404);
@@ -115,7 +150,7 @@ exports.deleteReview = async (request, h) => {
         //     return h.response("Du kan inte ta bort någon annans recension").code(403);
         // }
 
-        await review.deleteOne(); // Ta bort recension 
+      //  await review.deleteOne(); // Ta bort recension 
         return h.response({ message: "Recensionen togs bort" }).code(204);
 
         // Frånga fel 

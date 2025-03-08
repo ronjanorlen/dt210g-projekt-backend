@@ -135,6 +135,7 @@ exports.checkUser = async (request, h) => {
         if (!request.auth.isAuthenticated) {
             return h.response({ message: "Inte inloggad" }).code(401);
         }
+
         // Hämta användarinfo från credentials
         const user = request.auth.credentials;
         return h.response({ message: "Användare inloggad", user }).code(200);

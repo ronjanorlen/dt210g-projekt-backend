@@ -6,6 +6,10 @@ const reviewSchema = Mongoose.Schema({
         type: String,
         required: true
     },
+    bookTitle: {
+        type: String,
+        required: true
+    },
     userId: {
         type: Mongoose.Schema.Types.ObjectId, // Koppla ihop med användare baserat på id 
         ref: "User",
