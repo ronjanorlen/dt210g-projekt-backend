@@ -5,12 +5,6 @@ const User = require("../models/user.model");
 exports.getAllReviews = async (request, h) => {
      const { bookId } = request.query; // bokId 
 
-
-    // // om bokId inte finns 
-    // if (!bookId){
-    //     return h.response({ error: "Du måste ange bookId" }).code(400);
-    // }
-
     try {
 
        // const reviews = await Review.find();
@@ -115,10 +109,7 @@ exports.updateReview = async (request, h) => {
     try {
         const { id } = request.params; 
         const updating = request.payload;
-       // const userId = request.auth.credentials.id; // Hämta id från inloggad användare 
-
-        // kontrollera att recension finns och korrekt användare 
-       // const review = await Review.findOneAndUpdate({ _id: id, userId }, updating, {new: true });
+    
 
        const review = await Review.findByIdAndUpdate(id, updating, { new: true });
 
@@ -145,12 +136,6 @@ exports.deleteReview = async (request, h) => {
         if (!review) 
             return h.response("Hittade inte recensionen").code(404);
 
-        // Kontrollera användare 
-        // if (review.userId.toString() !== request.auth.credentials.id) {
-        //     return h.response("Du kan inte ta bort någon annans recension").code(403);
-        // }
-
-      //  await review.deleteOne(); // Ta bort recension 
         return h.response({ message: "Recensionen togs bort" }).code(204);
 
         // Frånga fel 

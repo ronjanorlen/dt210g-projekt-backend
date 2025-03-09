@@ -107,7 +107,12 @@ exports.loginUser = async (request, h) => {
         // Skapa token 
         const token = generateToken(user);
         // Skapa http-cooke 
-        return h.response({ message: "Lyckad inloggning.", user: { username: user.username } }).state("jwt", token);
+        return h.response({ 
+            message: "Lyckad inloggning.",
+            user: user,
+        })
+        .state("jwt", token);
+
         // Fånga fel 
     } catch (error) {
         console.error("Fel vid inloggning: ", error);
@@ -139,6 +144,7 @@ exports.checkUser = async (request, h) => {
         // Hämta användarinfo från credentials
         const user = request.auth.credentials;
         return h.response({ message: "Användare inloggad", user }).code(200);
+
         // Fånga fel 
     } catch (error) {
         console.error("Fel vid kontroll av inloggning: ", error);
