@@ -38,7 +38,7 @@ exports.createUser = async (request, h) => {
         // Kontrollera om användare redan finns 
         const userExist = await User.findOne({ username });
         if (userExist) {
-            return h.response({ message: "Användarnamnet är upptaget, välj något annat " }).code(400);
+            return h.response({ message: "Användarnamnet är upptaget, välj något annat" }).code(400);
         }
 
         // Hasha lösenord 
