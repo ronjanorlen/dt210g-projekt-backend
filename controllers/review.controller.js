@@ -39,39 +39,50 @@ exports.getSingleReview = async (request, h) => {
     }
 };
 
-// Lägg till ny recension 
+// TEST Lägg till ny recension 
 exports.createReview = async (request, h) => {
     try {
-
-       // const review = new Review(request.payload); // Ta data från payload 
-        const { bookId, bookTitle, userId, username, reviewText, rating } = request.payload; 
-
-        // Hämta användare från databasen 
-        const user = await User.findById(userId);
-        // Om användare in hittas 
-        if (!user) {
-            return h.response({ error: "Hittade inte användaren" }).code(404);
-        }
-
-        // Skapa ny recension 
-        const review = new Review({
-            bookId,
-            bookTitle,
-            userId,
-            username, 
-            reviewText,
-            rating,
-        });
-
-        await review.save(); // Spara recension 
-        return h.response(review).code(201);
-
-        // Fånga fel 
-    } catch (error) {
-        console.error("Något gick fel vid skapande av recension: ", error);
-        return h.response(error).code(500);
+        const review = new Review(request.payload);
+        return await review.save();
+    } catch (err) {
+        return h.response(err).code(500);
     }
 };
+
+
+// Lägg till ny recension 
+// exports.createReview = async (request, h) => {
+//     try {
+
+//        // const review = new Review(request.payload); // Ta data från payload 
+//     //    const { bookId, bookTitle, userId, username, reviewText, rating } = request.payload; 
+
+//         // Hämta användare från databasen 
+//      //   const user = await User.findById(userId);
+//         // Om användare in hittas 
+//     //    if (!user) {
+//      //       return h.response({ error: "Hittade inte användaren" }).code(404);
+//         }
+
+//         // Skapa ny recension 
+//    //     const review = new Review({
+//         //     bookId,
+//         //     bookTitle,
+//         //     userId,
+//         //     username, 
+//         //     reviewText,
+//         //     rating,
+//         // });
+
+//         await review.save(); // Spara recension 
+//         return h.response(review).code(201);
+
+//         // Fånga fel 
+//     } catch (error) {
+//         console.error("Något gick fel vid skapande av recension: ", error);
+//         return h.response(error).code(500);
+//     }
+// };
 
 // Hämta recensioner för inloggad användare 
 exports.getUserReviews = async (request, h) => {
