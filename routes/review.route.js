@@ -1,6 +1,6 @@
 const reviewController = require("../controllers/review.controller"); // Inkludera recension-controller 
 const { reviewValidation } = require("../middleware/validatereview"); // Inkludera middleware för recensioner 
-// const auth = require("../auth"); // inkluera autentisering 
+const auth = require("../auth"); // inkluera autentisering 
 
 // Routes 
 module.exports = (server) => {
@@ -45,15 +45,15 @@ module.exports = (server) => {
             method: "POST",
             path: "/reviews",
             handler: reviewController.createReview,
-             options: {
-                auth: false,
-                validate: {
-                     payload: reviewValidation,
-                     failAction: (request, h, err) => {
-                         throw err;
-                     }
-                 },
-             }
+            //  options: {
+            //     auth: false,
+            //     validate: {
+            //          payload: reviewValidation,
+            //          failAction: (request, h, err) => {
+            //              throw err;
+            //          }
+            //      },
+            //  }
         },
         // Uppdatera recension 
         {
@@ -75,9 +75,9 @@ module.exports = (server) => {
             method: "DELETE",
             path: "/reviews/{id}",
             handler: reviewController.deleteReview,
-             options: {
-                 auth: false
-             }
+            //  options: {
+            //      auth: false
+            //  }
         },
     ]);
 };
