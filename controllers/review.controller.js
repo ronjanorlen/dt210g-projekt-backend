@@ -7,8 +7,6 @@ exports.getAllReviews = async (request, h) => {
 
     try {
 
-       // const reviews = await Review.find();
-
        let query = {};
        if (bookId) {
         query.bookId = bookId; // Filtrera ut recensioner baserat på bokID 
@@ -39,7 +37,7 @@ exports.getSingleReview = async (request, h) => {
     }
 };
 
-// TEST Lägg till ny recension 
+// Lägg till ny recension 
 exports.createReview = async (request, h) => {
     try {
         const review = new Review(request.payload);

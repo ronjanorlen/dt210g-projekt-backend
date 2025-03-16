@@ -1,6 +1,6 @@
 const userController = require("../controllers/user.controller"); // Inkludera användar-controller  
 const { userValidation } = require("../middleware/validateuser"); // Inkludera användare-valiering från middleware 
-// const { options } = require("joi"); 
+const { options } = require("joi"); 
 
 // Routes 
 module.exports = (server) => {
