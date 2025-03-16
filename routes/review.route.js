@@ -45,34 +45,36 @@ module.exports = (server) => {
             method: "POST",
             path: "/reviews",
             handler: reviewController.createReview,
-            options: {
-                validate: {
-                    payload: reviewValidation,
-                    failAction: (request, h, err) => {
-                        throw err;
-                    }
-                }
-            }
+            //  options: {
+            //     auth: false,
+            //     validate: {
+            //          payload: reviewValidation,
+            //          failAction: (request, h, err) => {
+            //              throw err;
+            //          }
+            //      },
+            //  }
         },
         // Uppdatera recension 
         {
             method: "PUT",
             path: "/reviews/{id}",
             handler: reviewController.updateReview,
-            options: {
-                validate: {
-                    payload: reviewValidation,
-                    failAction: (request, h, err) => {
-                        throw err;
-                    }
-                }
-            }
+            // options: {
+            //     auth: false,
+            //     validate: {
+            //         payload: reviewValidation,
+            //         failAction: (request, h, err) => {
+            //             throw err;
+            //         }
+            //     },
+            // }
         },
         // Ta bort recension 
         {
             method: "DELETE",
             path: "/reviews/{id}",
-            handler: reviewController.deleteReview
+            handler: reviewController.deleteReview,
         },
     ]);
 };
